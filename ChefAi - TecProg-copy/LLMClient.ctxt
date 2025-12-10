@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.target=LLMClient
+comment1.params=user
+comment1.target=java.util.List\ generateRecipes(User)
+numComments=2

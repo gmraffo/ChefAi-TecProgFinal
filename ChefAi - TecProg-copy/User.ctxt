@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=User
+comment1.params=name
+comment1.target=User(java.lang.String)
+comment2.params=i
+comment2.target=void\ addIngredient(Ingredient)
+comment3.params=
+comment3.target=java.util.List\ getIngredients()
+comment4.params=
+comment4.target=java.lang.String\ getName()
+comment5.params=r
+comment5.target=void\ setRestriction(java.lang.String)
+comment6.params=
+comment6.target=java.lang.String\ getRestriction()
+comment7.params=t
+comment7.target=void\ setMealType(java.lang.String)
+comment8.params=
+comment8.target=java.lang.String\ getMealType()
+numComments=9

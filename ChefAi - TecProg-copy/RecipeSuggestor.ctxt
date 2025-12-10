@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=RecipeSuggestor
+comment1.params=client
+comment1.target=RecipeSuggestor(LLMClient)
+comment2.params=user
+comment2.target=java.util.List\ suggestRecipes(User)
+numComments=3
