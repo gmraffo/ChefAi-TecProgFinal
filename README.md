@@ -1,4 +1,5 @@
-## ChefAI — Sugestor de Receitas Inteligente
+# ChefAI — Sugestor de Receitas Inteligente
+
 ### Sobre o projeto
 
 * O ChefAI é um sistema desenvolvido em Java, utilizando o BlueJ, com o objetivo de sugerir receitas rápidas (até 30 minutos) com base nos ingredientes informados pelo usuário.
@@ -30,6 +31,114 @@ SuggestorRapido e SuggestorSaudavel → herança
 
 LLMClient + MockLLMClient → polimorfismo
 
+### Diagrama de Classes
+
+```mermaid
+classDiagram
+    %% Entidades Principais
+    class User {
+        -String nome
+        -List~Ingredient~ ingredients
+        -String dietaryRestriction
+        +addIngredient(Ingredient) void
+        +getIngredients() List~Ingredient~
+        +setDietaryRestriction(String) void
+        +getDietaryRestriction() String
+    }
+    
+    class Ingredient {
+        -String name
+        -int quantity
+        -String unit
+        +getDetails() String
+        +getName() String
+        +getQuantity() int
+    }
+    
+    class Recipe {
+        -String title
+        -int estimatedTime
+        -List~String~ steps
+        -List~Ingredient~ ingredients
+        -String category
+        +displayRecipe() void
+        +getTitle() String
+        +getEstimatedTime() int
+    }
+    
+    %% Sistema de Sugestão
+    class SuggestorBase {
+        <<abstract>>
+        -LLMClient llmClient
+        +suggestRecipes(User) List~Recipe~*
+        #formatPrompt(User) String
+        #processResponse(String) List~Recipe~
+    }
+    
+    class SuggestorRapido {
+        +suggestRecipes(User) List~Recipe~
+        -filterQuickRecipes(List~Recipe~) List~Recipe~
+    }
+    
+    class SuggestorSaudavel {
+        +suggestRecipes(User) List~Recipe~
+        -validateHealthyRecipe(Recipe) boolean
+        -calculateNutrients(Recipe) Map
+    }
+    
+    %% Integração com LLM
+    class LLMClient {
+        <<interface>>
+        +generateSuggestion(String prompt) String*
+        +configureAPI(String key) void
+    }
+    
+    class RealLLMClient {
+        -String apiKey
+        -String endpoint
+        +generateSuggestion(String prompt) String
+        +validateConnection() boolean
+    }
+    
+    class MockLLMClient {
+        -List~String~ mockResponses
+        +generateSuggestion(String prompt) String
+        +addMockResponse(String) void
+    }
+    
+    %% Gerenciamento de Configuração
+    class Configuration {
+        -Properties properties
+        -String configFile
+        +loadConfig() void
+        +getProperty(String key) String
+        +getLLMClientType() String
+        +getAPIKey() String
+    }
+    
+    %% Relacionamentos
+    User "1" --* "many" Ingredient : contém
+    Recipe "1" --* "many" Ingredient : utiliza
+    
+    SuggestorBase <|-- SuggestorRapido : herda
+    SuggestorBase <|-- SuggestorSaudavel : herda
+    
+    LLMClient <|.. RealLLMClient : implementa
+    LLMClient <|.. MockLLMClient : implementa
+    
+    SuggestorBase --> LLMClient : utiliza
+    SuggestorBase --> User : processa
+    SuggestorBase --> Recipe : retorna
+    
+    Configuration ..> RealLLMClient : fornece configuração
+    Configuration ..> SuggestorBase : configura
+```
+
+**Legenda do Diagrama:**
+- `-` = privado, `+` = público, `#` = protegido
+- `<<abstract>>` = classe abstrata, `<<interface>>` = interface
+- `--*` = composição, `<|--` = herança, `<|..` = implementação
+
 ### Tecnologias utilizadas
 
 * Java
@@ -48,22 +157,26 @@ LLMClient + MockLLMClient → polimorfismo
 
 ### Exemplos de uso
 
-Entrada:
+*Entrada:*
 
 Nome: Gio
+
 Ingrediente: ovo
+
 Quantidade: 2
+
 Restrição: nenhuma
 
 
-Saída:
+*Saída:*
 
 === Omelete Rápida ===
+
 Tempo estimado: 10 minutos
+
 ...
 
 ### Segurança
 * Chaves de API não são armazenadas no código
 * Utilização de arquivo externo config.properties
 * Versão mock disponível para testes offline
-
